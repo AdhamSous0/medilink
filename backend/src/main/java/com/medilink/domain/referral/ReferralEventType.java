@@ -1,0 +1,7 @@
+package com.medilink.domain.referral;
+
+public enum ReferralEventType {
+    CREATED, SENT, VIEWED, ACCEPTED, REJECTED, DECLINED,
+    EXPIRED, SCHEDULED, REDIRECTED, STARTED, COMPLETED, CANCELLED,
+    NOTE_ADDED, ATTACHMENT_ADDED
+}

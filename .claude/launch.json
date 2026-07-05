@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "MediLink Frontend",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev", "--prefix", "C:\\Users\\al falak\\OneDrive\\Desktop\\med-path-weave-main\\med-path-weave-main"],
+      "port": 3001
+    }
+  ]
+}
