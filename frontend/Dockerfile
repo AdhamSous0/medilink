@@ -8,8 +8,8 @@ ENV VITE_API_URL=$VITE_API_URL
 RUN npm run build
 
 FROM node:22-alpine
-RUN npm install -g miniflare
+RUN npm install -g miniflare@2
 WORKDIR /app
 COPY --from=build /app/.output ./.output
 EXPOSE 3000
-CMD ["miniflare", "--port", "3000", "--host", "0.0.0.0", "--modules", ".output/server/index.mjs", "--assets", ".output/public"]
+CMD ["miniflare", "--port", "3000", "--host", "0.0.0.0", "--modules", "--site", ".output/public", ".output/server/index.mjs"]
