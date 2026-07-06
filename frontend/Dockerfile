@@ -1,4 +1,4 @@
-FROM node:20-alpine AS build
+FROM node:22-alpine AS build
 WORKDIR /app
 COPY package*.json ./
 RUN npm install
@@ -7,10 +7,9 @@ ARG VITE_API_URL
 ENV VITE_API_URL=$VITE_API_URL
 RUN npm run build
 
-FROM node:20-alpine
+FROM node:22-alpine
+RUN npm install -g miniflare
 WORKDIR /app
 COPY --from=build /app/.output ./.output
-ENV PORT=3000
-ENV HOST=0.0.0.0
 EXPOSE 3000
-CMD ["node", ".output/server/index.mjs"]
+CMD ["miniflare", "--port", "3000", "--host", "0.0.0.0", "--modules", ".output/server/index.mjs", "--assets", ".output/public"]
