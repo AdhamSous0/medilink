@@ -25,6 +25,7 @@ services:
       DB_USERNAME: medilink
       DB_PASSWORD: medilink
       JWT_SECRET: change-me-in-production-must-be-at-least-256-bits-long-secret-key
+      MEDILINK_CORS_ALLOWED_ORIGINS: http://localhost:3000,http://localhost:3001,http://157.245.188.139,http://157.245.188.139:3001
     ports:
       - "8081:8080"
 
