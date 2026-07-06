@@ -8,8 +8,9 @@ ENV VITE_API_URL=$VITE_API_URL
 RUN npm run build
 
 FROM node:22-alpine
-RUN npm install -g miniflare@2
+RUN npm install -g wrangler
 WORKDIR /app
 COPY --from=build /app/.output ./.output
+WORKDIR /app/.output/server
 EXPOSE 3000
-CMD ["miniflare", "--port", "3000", "--host", "0.0.0.0", "--modules", "--site", ".output/public", ".output/server/index.mjs"]
+CMD ["wrangler", "dev", "index.mjs", "--port", "3000", "--no-bundle", "--local", "--ip", "0.0.0.0"]
