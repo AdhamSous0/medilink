@@ -60,23 +60,22 @@ function NotificationsPage() {
     const notifs = (notifRes.data as Row[] | null) ?? [];
     const invitations = (invRes.data as Array<{ id: string; status: string }> | null) ?? [];
 
-    // Map invitation notifications to pending invitation IDs
+    const pendingIds = new Set(
+      invitations.filter((inv) => inv.status === "pending").map((inv) => inv.id)
+    );
+
     const pendingMap: Record<string, string> = {};
     const respondedIds = new Set<string>();
 
-    // For each invitation notification, find the corresponding pending invitation
-    // We'll use index-based matching: notifications of type "invitation" map to pending invitations
-    const pendingInvList = invitations.filter((inv) => inv.status === "pending");
-    const invNotifs = notifs.filter((n) => n.type === "invitation");
-
-    // Simple heuristic: match by order
-    invNotifs.forEach((n, i) => {
-      if (pendingInvList[i]) {
-        pendingMap[n.id] = pendingInvList[i].id;
-      } else {
-        respondedIds.add(n.id);
-      }
-    });
+    notifs
+      .filter((n) => n.type === "invitation")
+      .forEach((n) => {
+        if (n.invitation_id && pendingIds.has(n.invitation_id)) {
+          pendingMap[n.id] = n.invitation_id;
+        } else {
+          respondedIds.add(n.id);
+        }
+      });
 
     setPendingInvites(pendingMap);
     setRespondedSet(respondedIds);

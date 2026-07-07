@@ -460,7 +460,7 @@ public class V3Controller {
     public ResponseEntity<List<Map<String, Object>>> listNotifications(@AuthenticationPrincipal User user) {
         if (user == null) return ResponseEntity.status(401).build();
         var rows = jdbc.queryForList("""
-            SELECT id::text, user_id::text, type, title, message, link, read, created_at::text
+            SELECT id::text, user_id::text, type, title, message, link, read, created_at::text, invitation_id::text
             FROM notifications
             WHERE user_id = ?::uuid
             ORDER BY created_at DESC
@@ -948,13 +948,13 @@ public class V3Controller {
 
         // Send notification to doctor
         jdbc.update("""
-            INSERT INTO notifications (id, user_id, type, title, message, link)
-            VALUES (?::uuid, ?::uuid, 'invitation', ?, ?, ?)
+            INSERT INTO notifications (id, user_id, type, title, message, link, invitation_id)
+            VALUES (?::uuid, ?::uuid, 'invitation', ?, ?, ?, ?::uuid)
             """,
             UUID.randomUUID().toString(), doctorId,
             "طلب انضمام إلى مركز طبي",
             "يدعوك " + cName + " للانضمام كطبيب متعاون" + (message != null && !message.isBlank() ? ": " + message : ""),
-            "/invitations"
+            "/notifications", id
         );
 
         return ResponseEntity.status(201).body(Map.of("id", id));
