@@ -876,7 +876,7 @@ public class V3Controller {
                 WHERE center_id = ?::uuid AND doctor_id = ?::uuid
                 ORDER BY day_of_week, start_time
                 """, id, doc.get("id"));
-            ((HashMap<String, Object>) doc).put("schedule", schedule);
+            doc.put("schedule", schedule);
         }
         row.put("doctors", doctors);
         return ResponseEntity.ok(row);
