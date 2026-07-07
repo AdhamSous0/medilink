@@ -44,7 +44,6 @@ function groupByDate(rows: Row[]) {
 }
 
 function NotificationsPage() {
-  console.log("[DEBUG] NotificationsPage render");
   const { user } = useCurrentUser();
   const { t } = useI18n();
   const [rows, setRows] = useState<Row[] | null>(null);
@@ -90,9 +89,7 @@ function NotificationsPage() {
   async function remove(id: string) { await api.deleteNotification(id); void load(); }
 
   async function respondInvitation(notifId: string, invitationId: string, status: "accepted" | "rejected") {
-    console.log("[DEBUG] respondInvitation called", { notifId, invitationId, status });
     const { error } = await api.respondToInvitation(invitationId, status);
-    console.log("[DEBUG] respondToInvitation result", { error });
     if (error) {
       toast.error("فشل الرد على الدعوة");
       return;
@@ -187,7 +184,7 @@ function NotificationsPage() {
                             <Button
                               size="sm"
                               className="h-7 text-xs bg-emerald-600 hover:bg-emerald-700 text-white"
-                              onClick={() => { console.log("[DEBUG] accept button clicked", n.id); respondInvitation(n.id, pendingInvites[n.id], "accepted"); }}
+                              onClick={() => respondInvitation(n.id, pendingInvites[n.id], "accepted")}
                             >
                               <CheckCircle2 className="h-3.5 w-3.5 mr-1" />
                               قبول
@@ -196,7 +193,7 @@ function NotificationsPage() {
                               size="sm"
                               variant="outline"
                               className="h-7 text-xs text-destructive hover:bg-destructive/10"
-                              onClick={() => { console.log("[DEBUG] reject button clicked", n.id); respondInvitation(n.id, pendingInvites[n.id], "rejected"); }}
+                              onClick={() => respondInvitation(n.id, pendingInvites[n.id], "rejected")}
                             >
                               <XCircle className="h-3.5 w-3.5 mr-1" />
                               رفض
