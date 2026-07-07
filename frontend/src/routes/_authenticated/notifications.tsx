@@ -177,7 +177,7 @@ function NotificationsPage() {
                           {new Date(n.created_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
                         </div>
                       </button>
-                      <div className="flex shrink-0 items-center gap-1">
+                      <div className="relative z-10 flex shrink-0 items-center gap-1">
                         {/* Invitation accept/reject buttons */}
                         {n.type === "invitation" && pendingInvites[n.id] && !respondedSet.has(n.id) && (
                           <div className="flex gap-1.5">
