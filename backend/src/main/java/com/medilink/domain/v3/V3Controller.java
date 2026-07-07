@@ -946,6 +946,12 @@ public class V3Controller {
             return ResponseEntity.status(409).body(Map.of("error", "Already invited"));
         }
 
+        // Get actual invitation ID (may differ from `id` if conflict occurred)
+        String actualInvId = jdbc.queryForObject(
+            "SELECT id::text FROM doctor_invitations WHERE center_id = ?::uuid AND doctor_id = ?::uuid",
+            String.class, centerId, doctorId
+        );
+
         // Send notification to doctor
         jdbc.update("""
             INSERT INTO notifications (id, user_id, type, title, message, link, invitation_id)
@@ -954,10 +960,10 @@ public class V3Controller {
             UUID.randomUUID().toString(), doctorId,
             "طلب انضمام إلى مركز طبي",
             "يدعوك " + cName + " للانضمام كطبيب متعاون" + (message != null && !message.isBlank() ? ": " + message : ""),
-            "/notifications", id
+            "/notifications", actualInvId
         );
 
-        return ResponseEntity.status(201).body(Map.of("id", id));
+        return ResponseEntity.status(201).body(Map.of("id", actualInvId));
     }
 
     @GetMapping("/api/invitations")
