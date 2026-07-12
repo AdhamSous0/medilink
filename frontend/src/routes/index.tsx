@@ -64,51 +64,79 @@ function Landing() {
             </div>
             <span className="text-lg font-semibold tracking-tight">MediLink</span>
           </div>
-          <div className="flex items-center gap-2">
-            <Link to="/auth">
-              <Button variant="ghost" size="sm">
-                Sign in / تسجيل الدخول
-              </Button>
-            </Link>
-            <Link to="/auth" search={{ mode: "signup" }}>
-              <Button size="sm">Get started / ابدأ الآن</Button>
-            </Link>
+          <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2">
+              <Link to="/auth">
+                <Button variant="ghost" size="sm">Sign in</Button>
+              </Link>
+              <Link to="/auth" search={{ mode: "signup" }}>
+                <Button size="sm">Get started</Button>
+              </Link>
+            </div>
+            <div className="h-5 w-px bg-border" />
+            <div className="flex items-center gap-2" dir="rtl">
+              <Link to="/auth">
+                <Button variant="ghost" size="sm">تسجيل الدخول</Button>
+              </Link>
+              <Link to="/auth" search={{ mode: "signup" }}>
+                <Button size="sm">ابدأ الآن</Button>
+              </Link>
+            </div>
           </div>
         </div>
       </header>
 
       <main>
-        <section className="mx-auto max-w-4xl px-6 py-24 text-center">
-          <div className="inline-flex items-center gap-2 rounded-full border border-border/70 bg-surface px-3 py-1 text-xs font-medium text-muted-foreground">
-            <span className="h-1.5 w-1.5 rounded-full bg-accent" /> Healthcare collaboration network
-            {" "}| شبكة تعاون صحي
-          </div>
-          <h1 className="mt-6 text-balance text-5xl font-semibold tracking-tight md:text-6xl">
-            One connected network for{" "}
-            <span className="text-primary">continuous patient care</span>.
-          </h1>
-          <h2 className="mt-2 text-balance text-3xl font-semibold tracking-tight text-muted-foreground md:text-4xl">
-            شبكة واحدة متصلة لـ<span className="text-primary">رعاية مستمرة للمرضى</span>
-          </h2>
-          <p className="mx-auto mt-6 max-w-2xl text-balance text-lg text-muted-foreground">
-            MediLink links doctors, clinics, medical centers, labs and patients — so referrals,
-            reports and follow-ups never fall through the cracks.
-          </p>
-          <p className="mx-auto mt-2 max-w-2xl text-balance text-lg text-muted-foreground">
-            ميدي لينك يربط الأطباء والعيادات والمراكز الطبية والمختبرات والمرضى — حتى لا تضيع
-            التحويلات والتقارير والمتابعات.
-          </p>
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-            <Link to="/auth" search={{ mode: "signup" }}>
-              <Button size="lg" className="gap-2">
-                Create your account / أنشئ حسابك <ArrowRight className="h-4 w-4" />
-              </Button>
-            </Link>
-            <Link to="/auth">
-              <Button size="lg" variant="outline">
-                Sign in / تسجيل الدخول
-              </Button>
-            </Link>
+        <section className="mx-auto max-w-6xl px-6 py-24">
+          <div className="grid gap-10 md:grid-cols-2">
+            {/* English column */}
+            <div className="text-left">
+              <div className="inline-flex items-center gap-2 rounded-full border border-border/70 bg-surface px-3 py-1 text-xs font-medium text-muted-foreground">
+                <span className="h-1.5 w-1.5 rounded-full bg-accent" /> Healthcare collaboration network
+              </div>
+              <h1 className="mt-6 text-balance text-4xl font-semibold tracking-tight md:text-5xl">
+                One connected network for{" "}
+                <span className="text-primary">continuous patient care</span>.
+              </h1>
+              <p className="mt-6 max-w-xl text-balance text-lg text-muted-foreground">
+                MediLink links doctors, clinics, medical centers, labs and patients — so referrals,
+                reports and follow-ups never fall through the cracks.
+              </p>
+              <div className="mt-8 flex flex-wrap items-center gap-3">
+                <Link to="/auth" search={{ mode: "signup" }}>
+                  <Button size="lg" className="gap-2">
+                    Create your account <ArrowRight className="h-4 w-4" />
+                  </Button>
+                </Link>
+                <Link to="/auth">
+                  <Button size="lg" variant="outline">Sign in</Button>
+                </Link>
+              </div>
+            </div>
+
+            {/* Arabic column */}
+            <div className="text-right" dir="rtl">
+              <div className="inline-flex items-center gap-2 rounded-full border border-border/70 bg-surface px-3 py-1 text-xs font-medium text-muted-foreground">
+                <span className="h-1.5 w-1.5 rounded-full bg-accent" /> شبكة تعاون صحي
+              </div>
+              <h1 className="mt-6 text-balance text-4xl font-semibold tracking-tight md:text-5xl">
+                شبكة واحدة متصلة لـ<span className="text-primary">رعاية مستمرة للمرضى</span>
+              </h1>
+              <p className="mt-6 max-w-xl text-balance text-lg text-muted-foreground">
+                ميدي لينك يربط الأطباء والعيادات والمراكز الطبية والمختبرات والمرضى — حتى لا تضيع
+                التحويلات والتقارير والمتابعات.
+              </p>
+              <div className="mt-8 flex flex-wrap items-center gap-3">
+                <Link to="/auth" search={{ mode: "signup" }}>
+                  <Button size="lg" className="gap-2">
+                    <ArrowRight className="h-4 w-4 rotate-180" /> أنشئ حسابك
+                  </Button>
+                </Link>
+                <Link to="/auth">
+                  <Button size="lg" variant="outline">تسجيل الدخول</Button>
+                </Link>
+              </div>
+            </div>
           </div>
         </section>
 
@@ -122,18 +150,28 @@ function Landing() {
                 <div className="grid h-10 w-10 place-items-center rounded-lg bg-primary-soft text-primary">
                   <Icon className="h-5 w-5" />
                 </div>
-                <h3 className="mt-4 font-semibold">
-                  {titleEn} / {titleAr}
-                </h3>
-                <p className="mt-1 text-sm text-muted-foreground">{descEn}</p>
-                <p className="mt-1 text-sm text-muted-foreground">{descAr}</p>
+                <div className="mt-4 grid grid-cols-2 gap-4">
+                  <div className="text-left">
+                    <h3 className="font-semibold">{titleEn}</h3>
+                    <p className="mt-1 text-sm text-muted-foreground">{descEn}</p>
+                  </div>
+                  <div className="text-right" dir="rtl">
+                    <h3 className="font-semibold">{titleAr}</h3>
+                    <p className="mt-1 text-sm text-muted-foreground">{descAr}</p>
+                  </div>
+                </div>
               </div>
             ))}
           </div>
 
           <div className="mt-16 rounded-2xl border border-border bg-surface p-8">
-            <div className="flex items-center gap-2 text-xs font-medium uppercase tracking-wider text-muted-foreground">
-              <FileText className="h-3.5 w-3.5" /> Referral workflow / مسار التحويل
+            <div className="flex items-center justify-between text-xs font-medium uppercase tracking-wider text-muted-foreground">
+              <span className="flex items-center gap-2">
+                <FileText className="h-3.5 w-3.5" /> Referral workflow
+              </span>
+              <span className="flex items-center gap-2" dir="rtl">
+                مسار التحويل <FileText className="h-3.5 w-3.5" />
+              </span>
             </div>
             <ol className="mt-4 grid gap-3 text-sm md:grid-cols-4">
               {steps.map((step, i) => (
@@ -141,9 +179,14 @@ function Landing() {
                   key={step.en}
                   className="rounded-lg border border-border bg-card p-4 shadow-card"
                 >
-                  <div className="text-xs font-medium text-primary">Step {i + 1} / خطوة {i + 1}</div>
-                  <div className="mt-1 font-medium">{step.en}</div>
-                  <div className="mt-1 font-medium">{step.ar}</div>
+                  <div className="flex items-center justify-between text-xs font-medium text-primary">
+                    <span>Step {i + 1}</span>
+                    <span dir="rtl">خطوة {i + 1}</span>
+                  </div>
+                  <div className="mt-2 grid grid-cols-2 gap-2">
+                    <div className="text-left font-medium">{step.en}</div>
+                    <div className="text-right font-medium" dir="rtl">{step.ar}</div>
+                  </div>
                 </li>
               ))}
             </ol>
@@ -153,8 +196,8 @@ function Landing() {
 
       <footer className="border-t border-border/60">
         <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-6 text-xs text-muted-foreground">
-          <span>© {new Date().getFullYear()} MediLink</span>
-          <span>Connected care, end to end. / رعاية متصلة من البداية للنهاية.</span>
+          <span>© {new Date().getFullYear()} MediLink — Connected care, end to end.</span>
+          <span dir="rtl">رعاية متصلة من البداية للنهاية.</span>
         </div>
       </footer>
     </div>
