@@ -38,8 +38,11 @@ public class ReferralController {
 
     @GetMapping("/{id}")
     @Operation(summary = "Get referral by ID")
-    public ResponseEntity<ReferralResponse> getById(@PathVariable UUID id) {
-        return ResponseEntity.ok(referralService.getById(id));
+    public ResponseEntity<ReferralResponse> getById(
+        @PathVariable UUID id,
+        @AuthenticationPrincipal User currentUser
+    ) {
+        return ResponseEntity.ok(referralService.getById(id, currentUser));
     }
 
     @PostMapping("/{id}/redirect")

@@ -296,6 +296,13 @@ public class V3Controller {
         String uid = user.getId().toString();
 
         if (referral_id != null) {
+            var ref = jdbc.queryForList(
+                "SELECT doctor_id::text, center_id::text FROM referrals WHERE id = ?::uuid", referral_id);
+            if (ref.isEmpty()) return ResponseEntity.notFound().build();
+            Map<String, Object> r0 = ref.get(0);
+            if (!uid.equals(String.valueOf(r0.get("doctor_id"))) && !uid.equals(String.valueOf(r0.get("center_id")))) {
+                return ResponseEntity.status(403).build();
+            }
             var rows = jdbc.queryForList("""
                 SELECT a.id::text, a.referral_id::text, a.scheduled_at::text,
                        a.duration_minutes, a.location, a.notes, a.created_at::text,
@@ -381,11 +388,12 @@ public class V3Controller {
     }
 
     @PostMapping("/api/messages")
-    public ResponseEntity<Map<String, Object>> sendMessage(
+    public ResponseEntity<?> sendMessage(
         @RequestBody Map<String, Object> body,
         @AuthenticationPrincipal User user
     ) {
-        if (user == null) return ResponseEntity.status(401).build();
+        var denied = checkReferralAccess((String) body.get("referral_id"), user);
+        if (denied != null) return denied;
         String id = UUID.randomUUID().toString();
         jdbc.update("""
             INSERT INTO referral_messages (id, referral_id, sender_id, body)
@@ -402,8 +410,23 @@ public class V3Controller {
 
     // ─── Reports ─────────────────────────────────────────────────────────────
 
+    private ResponseEntity<Void> checkReferralAccess(String referralId, User user) {
+        if (user == null) return ResponseEntity.status(401).build();
+        var ref = jdbc.queryForList(
+            "SELECT doctor_id::text, center_id::text FROM referrals WHERE id = ?::uuid", referralId);
+        if (ref.isEmpty()) return ResponseEntity.notFound().build();
+        Map<String, Object> r = ref.get(0);
+        String uid = user.getId().toString();
+        if (!uid.equals(String.valueOf(r.get("doctor_id"))) && !uid.equals(String.valueOf(r.get("center_id")))) {
+            return ResponseEntity.status(403).build();
+        }
+        return null;
+    }
+
     @GetMapping("/api/reports")
-    public ResponseEntity<List<Map<String, Object>>> listReports(@RequestParam String referral_id) {
+    public ResponseEntity<?> listReports(@RequestParam String referral_id, @AuthenticationPrincipal User user) {
+        var denied = checkReferralAccess(referral_id, user);
+        if (denied != null) return denied;
         var rows = jdbc.queryForList("""
             SELECT id::text, referral_id::text, uploaded_by::text,
                    title, summary, storage_path, mime_type, size_bytes, created_at::text, updated_at::text
@@ -415,18 +438,20 @@ public class V3Controller {
     }
 
     @PostMapping("/api/reports")
-    public ResponseEntity<Map<String, Object>> createReport(
+    public ResponseEntity<?> createReport(
         @RequestBody Map<String, Object> body,
         @AuthenticationPrincipal User user
     ) {
-        if (user == null) return ResponseEntity.status(401).build();
+        String referralId = (String) body.get("referral_id");
+        var denied = checkReferralAccess(referralId, user);
+        if (denied != null) return denied;
         String id = UUID.randomUUID().toString();
         jdbc.update("""
             INSERT INTO reports (id, referral_id, uploaded_by, title, summary)
             VALUES (?::uuid, ?::uuid, ?::uuid, ?, ?)
             """,
             id,
-            (String) body.get("referral_id"),
+            referralId,
             user.getId().toString(),
             (String) body.get("title"),
             (String) body.get("summary")
@@ -434,8 +459,8 @@ public class V3Controller {
         Boolean markCompleted = (Boolean) body.get("mark_completed");
         if (Boolean.TRUE.equals(markCompleted)) {
             jdbc.update("UPDATE referrals SET app_status = 'completed', updated_at = NOW() WHERE id = ?::uuid",
-                body.get("referral_id"));
-            recordEvent((String) body.get("referral_id"), "COMPLETED", user.getId().toString(), null);
+                referralId);
+            recordEvent(referralId, "COMPLETED", user.getId().toString(), null);
         }
         return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("id", id));
     }
@@ -443,7 +468,9 @@ public class V3Controller {
     // ─── Attachments ─────────────────────────────────────────────────────────
 
     @GetMapping("/api/attachments")
-    public ResponseEntity<List<Map<String, Object>>> listAttachments(@RequestParam String referral_id) {
+    public ResponseEntity<?> listAttachments(@RequestParam String referral_id, @AuthenticationPrincipal User user) {
+        var denied = checkReferralAccess(referral_id, user);
+        if (denied != null) return denied;
         var rows = jdbc.queryForList("""
             SELECT id::text, referral_id::text, uploaded_by::text,
                    label, storage_path, mime_type, size_bytes, created_at::text
@@ -707,6 +734,15 @@ public class V3Controller {
         @AuthenticationPrincipal User user
     ) {
         if (user == null) return ResponseEntity.status(401).build();
+        String uid = user.getId().toString();
+        var owner = jdbc.queryForList(
+            "SELECT lab_user_id::text, requested_by::text FROM lab_requests WHERE id = ?::uuid", id);
+        if (owner.isEmpty()) return ResponseEntity.notFound().build();
+        Map<String, Object> o = owner.get(0);
+        if (!uid.equals(String.valueOf(o.get("lab_user_id"))) && !uid.equals(String.valueOf(o.get("requested_by")))) {
+            return ResponseEntity.status(403).build();
+        }
+
         String status = (String) body.get("status");
         if (status != null) {
             jdbc.update("UPDATE lab_requests SET status = ?, updated_at = NOW() WHERE id = ?::uuid",

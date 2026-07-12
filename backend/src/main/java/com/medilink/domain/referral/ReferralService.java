@@ -88,9 +88,19 @@ public class ReferralService {
     }
 
     @Transactional(readOnly = true)
-    public ReferralResponse getById(UUID id) {
+    public ReferralResponse getById(UUID id, User currentUser) {
         Referral referral = referralRepository.findByIdWithDetails(id)
             .orElseThrow(() -> new ResourceNotFoundException("Referral", id));
+
+        UUID uid = currentUser.getId();
+        boolean isReferring = referral.getReferringPractitioner() != null
+            && referral.getReferringPractitioner().getUser().getId().equals(uid);
+        boolean isReceiving = referral.getReceivingPractitioner() != null
+            && referral.getReceivingPractitioner().getUser().getId().equals(uid);
+        if (!isReferring && !isReceiving) {
+            throw new ResourceNotFoundException("Referral", id);
+        }
+
         return ReferralResponse.from(referral);
     }
 
