@@ -93,7 +93,7 @@ const roleMeta: Record<AppRole, { icon: typeof Stethoscope; color: string }> = {
 function AppShellSkeleton() {
   return (
     <div className="min-h-screen bg-surface">
-      <aside className="fixed inset-y-0 left-0 hidden w-64 border-r border-sidebar-border bg-sidebar lg:flex lg:flex-col">
+      <aside className="fixed inset-y-0 start-0 hidden w-64 border-e border-sidebar-border bg-sidebar lg:flex lg:flex-col">
         <div className="flex h-16 items-center gap-2 border-b border-sidebar-border px-5">
           <Skeleton className="h-8 w-8 rounded-lg" />
           <Skeleton className="h-4 w-24" />
@@ -110,7 +110,7 @@ function AppShellSkeleton() {
           <Skeleton className="h-12 w-full rounded-lg" />
         </div>
       </aside>
-      <div className="lg:pl-64">
+      <div className="lg:ps-64">
         <header className="sticky top-0 z-30 flex h-16 items-center border-b border-border bg-background/80 px-4 lg:px-8">
           <Skeleton className="ml-auto h-8 w-8 rounded-lg" />
         </header>
@@ -226,7 +226,7 @@ export function AppShell({ children }: { children: ReactNode }) {
               }`}
             >
               {active && (
-                <span className="absolute left-0 top-1.5 bottom-1.5 w-0.5 rounded-full bg-primary" />
+                <span className="absolute start-0 top-1.5 bottom-1.5 w-0.5 rounded-full bg-primary" />
               )}
               <Icon className={`h-4 w-4 shrink-0 ${active ? "text-primary" : "text-muted-foreground group-hover:text-sidebar-accent-foreground"}`} />
               <span className="flex-1">{t(item.labelKey as any)}</span>
@@ -278,7 +278,7 @@ export function AppShell({ children }: { children: ReactNode }) {
 
   return (
     <div className="min-h-screen bg-surface">
-      <aside className="fixed inset-y-0 left-0 hidden w-64 border-r border-sidebar-border bg-sidebar lg:block">
+      <aside className="fixed inset-y-0 start-0 hidden w-64 border-e border-sidebar-border bg-sidebar lg:block">
         {SidebarBody}
       </aside>
 
@@ -288,7 +288,7 @@ export function AppShell({ children }: { children: ReactNode }) {
             className="absolute inset-0 bg-foreground/20 backdrop-blur-sm"
             onClick={() => setMobileOpen(false)}
           />
-          <aside className="absolute inset-y-0 left-0 w-72 border-r border-sidebar-border bg-sidebar shadow-elevated">
+          <aside className="absolute inset-y-0 start-0 w-72 border-e border-sidebar-border bg-sidebar shadow-elevated">
             <div className="flex justify-end p-2">
               <Button variant="ghost" size="icon" onClick={() => setMobileOpen(false)}>
                 <X className="h-5 w-5" />
@@ -299,7 +299,7 @@ export function AppShell({ children }: { children: ReactNode }) {
         </div>
       )}
 
-      <div className="lg:pl-64">
+      <div className="lg:ps-64">
         <header className="sticky top-0 z-30 flex h-14 items-center gap-3 border-b border-border bg-background/90 px-4 backdrop-blur-md lg:px-8">
           <Button
             variant="ghost"
