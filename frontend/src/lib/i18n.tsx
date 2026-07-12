@@ -729,14 +729,14 @@ export function I18nProvider({ children }: { children: ReactNode }) {
     return (localStorage.getItem(STORAGE_KEY) as Lang) ?? "ar";
   });
 
-  const dir = lang === "ar" ? "rtl" : "ltr";
+  const dir = "ltr";
 
   function setLang(l: Lang) {
     setLangState(l);
     if (typeof window !== "undefined") {
       localStorage.setItem(STORAGE_KEY, l);
       document.documentElement.lang = l;
-      document.documentElement.dir = l === "ar" ? "rtl" : "ltr";
+      document.documentElement.dir = "ltr";
     }
   }
 
