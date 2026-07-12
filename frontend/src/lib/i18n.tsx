@@ -593,6 +593,25 @@ const translations = {
     // Language toggle
     switchToArabic: "العربية",
     switchToEnglish: "English",
+    // Landing page
+    landingNetworkBadge: "شبكة تعاون صحي",
+    landingHeroTitle: "شبكة واحدة متصلة لـ",
+    landingHeroHighlight: "رعاية مستمرة للمرضى.",
+    landingHeroDesc: "ميدي لينك يربط الأطباء والعيادات والمراكز الطبية والمختبرات والمرضى — حتى لا تضيع التحويلات والتقارير والمتابعات.",
+    landingCreateAccount: "أنشئ حسابك",
+    landingForDoctorsTitle: "للأطباء",
+    landingForDoctorsDesc: "أنشئ التحويلات، تابع حالة المرضى، وشارك الملاحظات السريرية — بدون مكالمات لا تنتهي.",
+    landingForCentersTitle: "للمراكز والمختبرات",
+    landingForCentersDesc: "اقبل التحويلات، حدد المواعيد، وارفع التقارير مباشرة للطبيب المحوِّل.",
+    landingForPatientsTitle: "للمرضى",
+    landingForPatientsDesc: "شاهد كل التحويلات والمواعيد والتقارير من كل مقدمي الرعاية — في مكان واحد.",
+    landingWorkflowTitle: "مسار التحويل",
+    landingStep: "خطوة",
+    landingStep1: "الطبيب ينشئ تحويلاً",
+    landingStep2: "المركز يقبل ويحدد الموعد",
+    landingStep3: "رفع التقرير",
+    landingStep4: "الطبيب يراجع ويكمل الرعاية",
+    landingFooterTagline: "رعاية متصلة من البداية للنهاية.",
     // Password change
     changePassword: "تغيير كلمة المرور",
     currentPassword: "كلمة المرور الحالية",
@@ -729,14 +748,14 @@ export function I18nProvider({ children }: { children: ReactNode }) {
     return (localStorage.getItem(STORAGE_KEY) as Lang) ?? "ar";
   });
 
-  const dir = "ltr";
+  const dir = lang === "ar" ? "rtl" : "ltr";
 
   function setLang(l: Lang) {
     setLangState(l);
     if (typeof window !== "undefined") {
       localStorage.setItem(STORAGE_KEY, l);
       document.documentElement.lang = l;
-      document.documentElement.dir = "ltr";
+      document.documentElement.dir = l === "ar" ? "rtl" : "ltr";
     }
   }
 
